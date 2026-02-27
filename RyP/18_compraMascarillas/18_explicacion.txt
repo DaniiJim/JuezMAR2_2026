@@ -1,0 +1,54 @@
+/*
+1. Representacion de las soluciones
+Cada solucion se representa como una tupla (x0, x1, ..., xm-1) donde xi indica si se utiliza el suministrador i o no, y a que facultad se le asigna parte de su stock. Cada decision consiste en asignar mascarillas de un suministrador a una facultad concreta.
+
+RESTRICCIONES
+
+
+2. Arbol de exploracion
+    - Cada nodo del arbol representa una solucion parcial, en la que ya se han considerado los k primeros suministradores (de 0 a k-1)
+    - Se generan ramas explorando dos decisiones: no usar el suministrador k, o usarlo para cubrir demanda en cada facultad que aun lo necesite
+    - Los nodos vivos se almacenan en una priority_queue ordenada por una cota inferior optimista del coste total (a minimizar)
+    - El arbol se recorre expandiendo siempre el nodo mas prometedor (menor estimacion)
+
+
+3. Tipo de los nodos y marcadores usados
+    Cada nodo del arbol guarda:
+    - k: suministrador que se esta evaluando en este momento
+    - demanda_nodo[i]: demanda restante de la facultad i --> permite conocer el estado actual de necesidades por facultad
+    - mascarillasRestantes: suma total de mascarillas que faltan por cubrir
+    - coste: coste acumulado hasta el momento segun las decisiones tomadas
+    - estimacion: cota inferior del coste total minimo alcanzable desde este nodo --> para podar ramas si no pueden superar el mejor coste actual
+
+
+4. Poda de optimalidad
+
+El tipo de poda que hemos usado es optimista:
+La funcion de estimacion optimista, proporciona una cota inferior del coste que puede alcanzarse desde un nodo:
+    - Supone que toda la demanda restante puede cubrirse usando siempre los suministradores con precio mas bajo disponibles
+    - Esto subestima el coste real, lo cual es adecuado para el problema ya que es de minimizacion
+
+Calculo de la estimacion
+    - Se parte del coste acumulado actual.
+    - Se calcula el coste minimo adicional que haria falta para cubrir la demanda restante con los precios mas baratos posibles.
+    - Si la suma es mayor o igual al mejor coste actual (mejor), se poda la rama.
+
+No usamos cota pesimista porque no ayuda a podar, ya que no permite garantizar que una rama no pueda mejorar la mejor solucion actual
+
+
+5. Llamada inicial y expansion de nodos
+Se comienza desde un nodo raiz con todos los valores iniciales: demanda original, coste 0, k = 0 y estimacion optimista.
+En cada paso se generan hijos:
+    - Opcion 1: no usar el suministrador k (se incrementa k)
+    - Opcion 2: usar el suministrador k para cubrir demanda en alguna facultad (respetando el stock disponible y la demanda restante)
+  
+Por cada hijo se actualiza:
+    - La demanda restante por facultad.
+    - El stock restante del suministrador si se usa.
+    - El coste y la estimacion.
+
+6. Coste del algoritmo
+    - Coste temporal: En el peor caso, el coste es exponencial en m y n (numero de suministradores y facultades), pero las podas por optimalidad reducen mucho el numero real de nodos explorados
+    - Coste espacial: O(S × n), donde S es el numero maximo de nodos vivos en la cola de prioridad, y n es el numero de facultades
+
+*/
