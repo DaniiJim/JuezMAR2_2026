@@ -1,9 +1,33 @@
-# Ejecutables Windows
+# --- Ejecutables / builds ---
 *.exe
-
-# (Opcional) basura típica de compilación
+*.out
+a.out
 *.o
 *.obj
-a.out
+*.dll
+*.so
+*.dylib
+
+# Carpetas típicas de compilación
 build/
 bin/
+cmake-build-*/
+Debug/
+Release/
+
+
+# --- CMake (si lo usáis) ---
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# --- Windows ---
+Thumbs.db
+.DS_Store
+*.lnk
+
+# --- Depuración (por si compilas con MSVC alguna vez) ---
+*.pdb
+*.ilk
+*.log
