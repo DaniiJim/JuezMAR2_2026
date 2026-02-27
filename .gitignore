@@ -1,0 +1,9 @@
+# Ejecutables Windows
+*.exe
+
+# (Opcional) basura típica de compilación
+*.o
+*.obj
+a.out
+build/
+bin/
